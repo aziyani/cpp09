@@ -12,7 +12,7 @@ HFILE = BitcoinExchange.hpp
 OBJ = $(SRC:%.cpp=%.o)
 
 %.o:%cpp $(HFILE)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 all: $(NAME)
 

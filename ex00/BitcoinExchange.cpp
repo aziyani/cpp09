@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:13:58 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/05 13:10:48 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/05 17:45:52 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ int BitcoinExchange::checkDate(std::string date)
         std::cerr << "Error: invalid date4" << std::endl;
         return (1);
     }
-    std::getline(ss, buffer, '-');
-    if (buffer.length() != 3)
+    std::getline(ss, buffer, ' ');
+    if (buffer.length() != 2)
     {
         std::cerr << "Error: invalid date5" << std::endl;
         return (1);
