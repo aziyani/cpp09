@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:14:08 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/04 16:43:20 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/05 12:21:46 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@
 class BitcoinExchange
 {
 	private:
-		std::map<std::string, std::string> _map;
-		std::map<std::string, std::string> database;
+		std::map<std::string, float> database;
 	public:
 		BitcoinExchange();
 		int checkDate(std::string date);
-		int checkValue(std::string value);
+		int checkValue(float value);
 		int check(char **av);
-		void print_equivalent(std::string date, std::string value);
+		void print_equivalent(std::string date, float value);
 };
 
 #endif

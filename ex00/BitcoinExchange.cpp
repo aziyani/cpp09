@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:13:58 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/04 16:47:07 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/05 13:10:48 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,27 @@ BitcoinExchange::BitcoinExchange()
     if (!data.is_open())
     {
         std::cout << "Error: could not open file" << std::endl;
-        return ;
+        return;
     }
     std::string line;
+    float fLine;
     getline(data, line);
-    while (getline(data, line)){
+    while (getline(data, line)) // line = "date, value"
+    {
         size_t pos = line.find(',');
         if (pos == std::string::npos)
-            return ;
-        std::string date = line.substr(0, pos);
-        std::string value = line.substr(pos + 1, line.length());
-        database[date] = value;
+            return;
+        std::string date = line.substr(0, pos); // date = "2017-01-01"
+        std::stringstream valueStream(line.substr(pos + 1, line.length()));
+        if (valueStream >> fLine)
+        {
+            database[date] = fLine;
+        }
+        else
+        {
+            std::cout << "Error: invalid file format" << std::endl;
+            return;
+        }
     }
 }
 
@@ -39,90 +49,91 @@ BitcoinExchange::BitcoinExchange()
 
 int BitcoinExchange::check(char **av)
 {
-	std::string holder;
-	std::string date;
-	std::string value;
+    std::string holder;
+    float value;
     std::string copyDate;
 
-	std::ifstream file(av[1]); // Open the file for reading
-	if (!file) // Check if the file is open
-	{
-		std::cout << "Error: could not open file" << std::endl;
-		return (1);
-	}
-	if (!std::getline(file, holder))
-	{
-		std::cout << "Error: could not read file" << std::endl;
-		return (1);
-	}
-	if (holder.compare("date | value") != 0)
-	{
-		std::cout << "Error: invalid file format" << std::endl;
-		return (1);
-	}
-	while (std::getline(file, holder))
-	{
-		int i = 0;
-		while (holder[i] != '|' && holder[i] != '\0')
-		{
-			date += holder[i];
-			i++;
-		}
-		if (holder[i] == '|')
-			i++;
-		else
-		{
-			std::cerr << "Error: invalid file format" << std::endl;
-			return (1);
-		}
-		while (holder[i] != '\n' && holder[i] != '\0')
-		{
-			value += holder[i];
-			i++;
-		}
-		checkDate(date);
-		checkValue(value);
-        print_equivalent(date, value);
-        // _map[date] = value;
-        date.clear();
-        value.clear();
-	}
+    std::ifstream file(av[1]); // Open the file for reading
+    if (!file)                 // Check if the file is open
+    {
+        std::cout << "Error: could not open file" << std::endl;
+        return (1);
+    }
+    if (!std::getline(file, holder))
+    {
+        std::cout << "Error: could not read file" << std::endl;
+        return (1);
+    }
+    if (holder.compare("date | value") != 0)
+    {
+        std::cout << "Error: invalid file format" << std::endl;
+        return (1);
+    }
+    while (std::getline(file, holder))
+    {
+        std::string date;
+        int i = 0;
+        while (holder[i] != '|' && holder[i] != '\0')
+        {
+            date += holder[i];
+            i++;
+        }
+        if (holder[i] == '|')
+            i++;
+        else
+        {
+            std::cerr << "Error: bad input => " << holder << std::endl;
+            continue;
+        }
+        std::stringstream vvalue(&holder[i]);
+        if (!(vvalue >> value))
+        {
+            std::cout << "Error: invalid file format" << std::endl;
+            continue;
+        }
+        if (!checkDate(date) && !checkValue(value))
+            print_equivalent(date, value);
+        value = 0;
+    }
     return (0);
 }
 
 // ========================================================================
 
-void BitcoinExchange::print_equivalent(std::string date, std::string value)
+void BitcoinExchange::print_equivalent(std::string date, float value)
 {
-    std::map<std::string, std::string>::iterator it = database.lower_bound(date);
-    std::cout << it->first << ", " << it->second << std::endl;
-    // double dValue = std::strtod(value.c_str(), NULL);
-    // double dValue2 = std::strtod(database[date].c_str(), NULL);
-    // double result = dValue * dValue2;
-    // std::cout << date << " | " << result << std::endl;
+    std::map<std::string, float>::iterator mapIterator;
+    mapIterator = database.lower_bound(date);
+    if (mapIterator->first != date)
+    {
+        if (mapIterator != database.begin())
+            mapIterator--;
+    }
+    std::cout << date << " => " << value << " = " << mapIterator->second * value << std::endl;
 }
 
 // ========================================================================
 
 int BitcoinExchange::checkDate(std::string date)
 {
-	int year, month, day, hyphen;
+    int year, month, day, hyphen;
     std::stringstream ss(date);
     std::string buffer;
 
-	hyphen = 0;
-	for (int i = 0; date[i]; i++)
-	{
-		if (date[i] == '-')
-			hyphen++;
-	}
-	if (hyphen != 2)
-	{
-		std::cerr << "Error: invalid date1" << std::endl;
-		return (1);
-	}
     hyphen = 0;
-    std::getline(ss, buffer, '-');    
+    for (int i = 0; date[i]; i++)
+    {
+        if (date[i] == '-')
+            hyphen++;
+    }
+    if (hyphen != 2)
+    {
+        // std::cout << "\n[" << date << "]\n";
+        std::cerr << "Error: invalid date1" << std::endl;
+        return (1);
+    }
+    hyphen = 0;
+    std::getline(ss, buffer, '-');
     year = std::strtod(buffer.c_str(), NULL); // convert string to double
     if (year < 2009 || year > 2024)
     {
@@ -130,7 +141,7 @@ int BitcoinExchange::checkDate(std::string date)
         return (1);
     }
     std::getline(ss, buffer, '-');
-    if  (buffer.length() != 2)
+    if (buffer.length() != 2)
     {
         std::cerr << "Error: invalid date3" << std::endl;
         return (1);
@@ -142,7 +153,7 @@ int BitcoinExchange::checkDate(std::string date)
         return (1);
     }
     std::getline(ss, buffer, '-');
-    if  (buffer.length() != 3)
+    if (buffer.length() != 3)
     {
         std::cerr << "Error: invalid date5" << std::endl;
         return (1);
@@ -154,37 +165,33 @@ int BitcoinExchange::checkDate(std::string date)
         return (1);
     }
     if (month == 2 && day > 28)
-	{
-		std::cerr << "Error: invalid date7" << std::endl;
-		return (1);
-	}
-	if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
-	{
-		std::cerr << "Error: invalid date8" << std::endl;
-		return (1);
-	}
+    {
+        std::cerr << "Error: invalid date7" << std::endl;
+        return (1);
+    }
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
+    {
+        std::cerr << "Error: invalid date8" << std::endl;
+        return (1);
+    }
     return (0);
 }
 
 // ========================================================================
 
-int BitcoinExchange::checkValue(std::string value)
+int BitcoinExchange::checkValue(float value)
 {
-    double dValue = std::strtod(value.c_str(), NULL);
-    if(value[0] != 0 && dValue == 0)
+    if (value < 0)
     {
-        std::cerr << "Error: invalid value" << std::endl;
+        std::cerr << "Error: not a positive number." << std::endl;
         return (1);
     }
-    if (dValue < 0 || dValue > 1000)
+    if (value > 1000)
     {
-        std::cerr << "Error: invalid value" << std::endl;
+        std::cerr << "Error: too large a number." << std::endl;
         return (1);
     }
     return (0);
 }
-
-// ========================================================================
-
 
 // ========================================================================
