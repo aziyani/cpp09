@@ -6,18 +6,11 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:13:30 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/16 16:49:25 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/16 22:49:19 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Pmergeme.hpp"
-
-// int swaw(int *a, int *b)
-// {
-// 	int temp = *a;
-// 	*a = *b;
-// 	*b = temp;
-// }
 
 // ===========================================================================
 
@@ -254,14 +247,14 @@ void Pmergeme::mergeSort()
 
 // ==================================================================================================================================================================================================
 
-void Pmergeme::init(char **input, int size)
+void Pmergeme::init_(char **input, int size)
 {
 	// store the numbers from the input to the holder vector 
 	std::string token;
 	for (int i = 1; i <= size; ++i){
 		std::stringstream ss(input[i]);
 		while (ss >> token){
-			holder.push_back(std::strtod(token.c_str(), NULL));
+			holder_.push_back(std::strtod(token.c_str(), NULL));
 		}
 	}
 		// holder.push_back(std::strtod(token.c_str(), NULL));
@@ -276,12 +269,12 @@ listOflists Pmergeme::make_array_of_vectors_()
 {
 	// create a vector of vectors from holder each vector holding elementsize number of elements
 	listOflists arr;
-	list::iterator it = holder.begin();
+	list::iterator it = holder_.begin();
 	list temp;
 	
-	while (it != holder.end())
+	while (it != holder_.end())
 	{
-		for (size_t j = 0; j < elementsize && it != holder.end(); ++j)
+		for (size_t j = 0; j < elementsize && it != holder_.end(); ++j)
 		{
 			temp.push_back(*it);
 			++it;
@@ -313,14 +306,14 @@ void Pmergeme::sort_pairs_(listOflists& arr){
 
 void Pmergeme::copy_arr_to_holder_(listOflists arr){ 
 	// copyy arr to holder vector
-	holder.clear();
+	holder_.clear();
 	listOflists::iterator it = arr.begin();
 	while (it != arr.end())
 	{
 		list::iterator innerIt = it->begin();
 		while (innerIt != it->end())
 		{
-			holder.push_back(*innerIt);
+			holder_.push_back(*innerIt);
 			++innerIt;
 		}
 		++it;
@@ -348,17 +341,17 @@ bool Pmergeme::more_than_one_pair_(listOflists arr){ // pair = two vectors
 
 // ===========================================================================
 
-void printVectorOfVectors(const std::vector<std::vector<int> >& vec) {
-	std::cout << "start vecofvec\n";
-	for (std::vector<std::vector<int> >::const_iterator it = vec.begin(); it != vec.end(); ++it) {
-		std::cout << "[ ";
-		for (std::vector<int>::const_iterator innerIt = it->begin(); innerIt != it->end(); ++innerIt) {
-			std::cout << *innerIt << " ";
-		}
-		std::cout << " ]\n";
-	}
-	std::cout << "\n\nend vecofvec\n";
-}
+// void printVectorOfVectors(const std::vector<std::vector<int> >& vec) {
+// 	std::cout << "start vecofvec\n";
+// 	for (std::vector<std::vector<int> >::const_iterator it = vec.begin(); it != vec.end(); ++it) {
+// 		std::cout << "[ ";
+// 		for (std::vector<int>::const_iterator innerIt = it->begin(); innerIt != it->end(); ++innerIt) {
+// 			std::cout << *innerIt << " ";
+// 		}
+// 		std::cout << " ]\n";
+// 	}
+// 	std::cout << "\n\nend vecofvec\n";
+// }
 // ===========================================================================
 
 void Pmergeme::create_mainchain_penchain_(listOflists arr){
@@ -366,41 +359,38 @@ void Pmergeme::create_mainchain_penchain_(listOflists arr){
 
 	if (arr.back().size() != elementsize)
 	{
-		rest = arr.back();
+		rest_ = arr.back();
 		arr.pop_back();
 	}
 	
-	mainchain.clear();
-	pendchain.clear();
-
-	mainchain.reserve(arr.size());
-	pendchain.reserve(arr.size());
+	mainchain_.clear();
+	pendchain_.clear();
 	
 	listOflists::iterator it = arr.begin();
 	listOflists::iterator nextIterator = it;
 	++nextIterator;
-	mainchain.insert(mainchain.end(), *it);
-	mainchain.insert(mainchain.end(), *nextIterator);
+	mainchain_.insert(mainchain_.end(), *it);
+	mainchain_.insert(mainchain_.end(), *nextIterator);
     while (it != arr.end())
     {
         pair.first = *it;
-        pair.second = mainchain.end();
+        pair.second = mainchain_.end();
         ++it;
         if (it != arr.end())
-            pair.second = mainchain.insert(mainchain.end(), *it); // we use insert here because it is return an iterator of the position of the inserted element
+            pair.second = mainchain_.insert(mainchain_.end(), *it); // we use insert here because it is return an iterator of the position of the inserted element
         ++it;
-        pendchain.push_back(pair);
+        pendchain_.push_back(pair);
     }     
 }
 
 // ===========================================================================
 
-bool compare(vector first, vector second){ 
+bool compare_(list first, list second){ 
 	return (first.back() < second.back());
 }
 // ===========================================================================
 
-void Pmergeme::insert_pendchain()
+void Pmergeme::insert_pendchain_()
 {
 	listOflists::iterator pos;
 	listOflists::iterator ins;
@@ -413,19 +403,19 @@ void Pmergeme::insert_pendchain()
 		178956970, 357913942, 715827882, 1431655766, 2863311530, 5726623062,
 		11453246122, 22906492246, 45812984490};
 	int j = 0;
-	while (pendchain.size())
+	while (pendchain_.size())
 	{
-		start = pendchain.begin();
-		end = pendchain.begin();
-		for (size_t i = 0; i < jac[j] - 1 && start != pendchain.end(); i++)
+		start = pendchain_.begin();
+		end = pendchain_.begin();
+		for (size_t i = 0; i < jac[j] - 1 && start != pendchain_.end(); i++)
 			start++;
-		if (start == pendchain.end())
+		if (start == pendchain_.end())
 			start--;
 		while (true)
 		{
-			pos = std::lower_bound(mainchain.begin(), start->second, start->first, compare); // we should not pass the end of the mainchain we should pass the pendchain.second?
-			ins = mainchain.insert(pos, start->first);
-			pendchain.erase(start);
+			pos = std::lower_bound(mainchain_.begin(), start->second, start->first, compare_); // we should not pass the end of the mainchain_ we should pass the pendchain_.second?
+			ins = mainchain_.insert(pos, start->first);
+			pendchain_.erase(start);
 			if (start == end)
 				break;
 			start--;
@@ -434,37 +424,37 @@ void Pmergeme::insert_pendchain()
 	}
 	if (rest.size())
 	{
-		mainchain.push_back(rest);
+		mainchain_.push_back(rest_);
 		rest.clear();    
 	}
 }
 
 // ===========================================================================
 
-void Pmergeme::insert_vector()
+void Pmergeme::insert_vector_()
 {
 	listOflists arr;
 
 	arr = make_array_of_vectors_();
 	create_mainchain_penchain_(arr);
 	insert_pendchain_();
-	copy_arr_to_holder_(mainchain);
+	copy_arr_to_holder_(mainchain_);
 	elementsize /= 2;
 }
 // ===========================================================================
 
-void Pmergeme::mergeSort()
+void Pmergeme::mergeSort_()
 {
-	vectorOfvectors arr;
+	listOflists arr;
 
-	arr = make_array_of_vectors();
-	printVectorOfVectors(arr);
-	sort_pairs(arr);
-	copy_arr_to_holder(arr);
-	if (more_than_one_pair(arr))
+	arr = make_array_of_vectors_();
+	// printVectorOfVectors_(arr);
+	sort_pairs_(arr);
+	copy_arr_to_holder_(arr);
+	if (more_than_one_pair_(arr))
 	{
 		elementsize *= 2;
-		mergeSort();
+		mergeSort_();
 	}
-	insert_vector();
+	insert_vector_();
 }
