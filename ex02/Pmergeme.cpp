@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:13:30 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/16 22:49:19 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:37:39 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 Pmergeme::Pmergeme(){
 	elementsize = 1; // element size of vector
+	elementsize_ = 1;
 }
 
 void Pmergeme::init(char **input, int size)
@@ -28,10 +29,6 @@ void Pmergeme::init(char **input, int size)
 			holder.push_back(std::strtod(token.c_str(), NULL));
 		}
 	}
-		// holder.push_back(std::strtod(token.c_str(), NULL));
-
-	// while (std::getline(ss, token, ' '))
-		// holder.push_back(std::atoi(token.c_str()));
 }
 
 // ===========================================================================
@@ -234,7 +231,7 @@ void Pmergeme::mergeSort()
 	vectorOfvectors arr;
 
 	arr = make_array_of_vectors();
-	printVectorOfVectors(arr);
+	// printVectorOfVectors(arr);
 	sort_pairs(arr);
 	copy_arr_to_holder(arr);
 	if (more_than_one_pair(arr))
@@ -257,10 +254,6 @@ void Pmergeme::init_(char **input, int size)
 			holder_.push_back(std::strtod(token.c_str(), NULL));
 		}
 	}
-		// holder.push_back(std::strtod(token.c_str(), NULL));
-
-	// while (std::getline(ss, token, ' '))
-		// holder.push_back(std::atoi(token.c_str()));
 }
 
 // ===========================================================================
@@ -270,17 +263,15 @@ listOflists Pmergeme::make_array_of_vectors_()
 	// create a vector of vectors from holder each vector holding elementsize number of elements
 	listOflists arr;
 	list::iterator it = holder_.begin();
-	list temp;
-	
 	while (it != holder_.end())
 	{
-		for (size_t j = 0; j < elementsize && it != holder_.end(); ++j)
+		list temp;
+		for (size_t j = 0; j < elementsize_ && it != holder_.end(); ++j)
 		{
 			temp.push_back(*it);
 			++it;
 		}
 		arr.push_back(temp);
-		temp.clear();
 	}
 	return arr;
 }
@@ -294,7 +285,9 @@ void Pmergeme::sort_pairs_(listOflists& arr){
 	{
 		listOflists::iterator nextIterator = it;
 		++nextIterator;
-		if (nextIterator->size() != elementsize)
+		if (nextIterator == arr.end())//////// this line is added only in list why? why we don't check it in the vector
+            break;
+		if (nextIterator->size() != elementsize_)
 			break ;
 		if (it->back() > nextIterator->back())
 			std::iter_swap(it, nextIterator);
@@ -310,6 +303,7 @@ void Pmergeme::copy_arr_to_holder_(listOflists arr){
 	listOflists::iterator it = arr.begin();
 	while (it != arr.end())
 	{
+
 		list::iterator innerIt = it->begin();
 		while (innerIt != it->end())
 		{
@@ -323,16 +317,19 @@ void Pmergeme::copy_arr_to_holder_(listOflists arr){
 // ===========================================================================
 
 bool Pmergeme::more_than_one_pair_(listOflists arr){ // pair = two vectors
-	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize number of elements
+	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize_ number of elements
 	listOflists::iterator it = arr.begin();
 	size_t count = 0;
 	while (it != arr.end())
 	{
 		listOflists::iterator nextIterator = it;
 		++nextIterator;
-		if (it->size() == elementsize && (nextIterator != arr.end() && nextIterator->size() == elementsize)) //
+		if (it->size() == elementsize_ && (nextIterator != arr.end() && nextIterator->size() == elementsize_)) //
 			count++;
-		std::advance(it, 2);
+		if (nextIterator != arr.end())
+            std::advance(it, 2);
+        else
+            break;
 	}
 	if (count > 1)
 		return true;
@@ -341,45 +338,35 @@ bool Pmergeme::more_than_one_pair_(listOflists arr){ // pair = two vectors
 
 // ===========================================================================
 
-// void printVectorOfVectors(const std::vector<std::vector<int> >& vec) {
-// 	std::cout << "start vecofvec\n";
-// 	for (std::vector<std::vector<int> >::const_iterator it = vec.begin(); it != vec.end(); ++it) {
-// 		std::cout << "[ ";
-// 		for (std::vector<int>::const_iterator innerIt = it->begin(); innerIt != it->end(); ++innerIt) {
-// 			std::cout << *innerIt << " ";
-// 		}
-// 		std::cout << " ]\n";
-// 	}
-// 	std::cout << "\n\nend vecofvec\n";
-// }
-// ===========================================================================
-
 void Pmergeme::create_mainchain_penchain_(listOflists arr){
 	std::pair<list, listOflists::iterator> pair;
 
-	if (arr.back().size() != elementsize)
+	if (arr.back().size() != elementsize_)
 	{
 		rest_ = arr.back();
 		arr.pop_back();
 	}
 	
-	mainchain_.clear();
+	mainchain_.clear();	
 	pendchain_.clear();
 	
 	listOflists::iterator it = arr.begin();
-	listOflists::iterator nextIterator = it;
-	++nextIterator;
-	mainchain_.insert(mainchain_.end(), *it);
-	mainchain_.insert(mainchain_.end(), *nextIterator);
+	mainchain_.push_back(*it);
+	++it;
+	mainchain_.push_back(*it);
+	++it;
+	
     while (it != arr.end())
     {
         pair.first = *it;
         pair.second = mainchain_.end();
         ++it;
-        if (it != arr.end())
+        if (it != arr.end()){
             pair.second = mainchain_.insert(mainchain_.end(), *it); // we use insert here because it is return an iterator of the position of the inserted element
-        ++it;
-        pendchain_.push_back(pair);
+        	++it;
+		}
+
+       	pendchain_.push_back(pair);
     }     
 }
 
@@ -396,6 +383,7 @@ void Pmergeme::insert_pendchain_()
 	listOflists::iterator ins;
 	pendL::iterator it;
 	pendL::iterator start;
+	pendL::iterator tmp;
 	pendL::iterator end;
 	unsigned long jac[] = {2, 2, 6, 10, 22, 42, 86, 170, 342, 682, 1366,
 		2730, 5462, 10922, 21846, 43690, 87382, 174762, 349526, 699050,
@@ -414,18 +402,22 @@ void Pmergeme::insert_pendchain_()
 		while (true)
 		{
 			pos = std::lower_bound(mainchain_.begin(), start->second, start->first, compare_); // we should not pass the end of the mainchain_ we should pass the pendchain_.second?
+
 			ins = mainchain_.insert(pos, start->first);
+			tmp = start;
+			--tmp;
+			
 			pendchain_.erase(start);
 			if (start == end)
-				break;
-			start--;
+				break ;
+			start = tmp;
 		}
 		j++;
 	}
-	if (rest.size())
+	if (rest_.size())
 	{
 		mainchain_.push_back(rest_);
-		rest.clear();    
+		rest_.clear();    
 	}
 }
 
@@ -439,22 +431,28 @@ void Pmergeme::insert_vector_()
 	create_mainchain_penchain_(arr);
 	insert_pendchain_();
 	copy_arr_to_holder_(mainchain_);
-	elementsize /= 2;
 }
 // ===========================================================================
 
 void Pmergeme::mergeSort_()
 {
 	listOflists arr;
-
+	
 	arr = make_array_of_vectors_();
-	// printVectorOfVectors_(arr);
+	// std::cout << "elementsize_ : " << elementsize_ << std::endl;
+	// std::cout << "mergeSort arr.size : " << arr.size() << " arr.back().size : " << arr.back().size() << std::endl;
+	bool	shouldDoInsertion = (arr.size() > 3) || ( arr.size() == 3 && arr.back().size() == elementsize_);
+	// std::cout << shouldDoInsertion << std::endl;
+	
 	sort_pairs_(arr);
 	copy_arr_to_holder_(arr);
+	// arr.size() > 3 && arr.back().size() == elementsize_
 	if (more_than_one_pair_(arr))
 	{
-		elementsize *= 2;
+		elementsize_ *= 2;
 		mergeSort_();
+		elementsize_ /= 2;
 	}
-	insert_vector_();
+	if (shouldDoInsertion)
+		insert_vector_();
 }

@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:50:31 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/16 22:12:08 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/17 17:35:57 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int main(int ac, char **av)
 	}
 	merge.init(av, ac -1);
 	merge.mergeSort();
-	// std::cout << std::is_sorted(merge.holder.begin(), merge.holder.end())  << std::endl;
-	
-	// printVector(merge.holder);
+	std::cout << std::is_sorted(merge.holder.begin(), merge.holder.end())  << std::endl;
+
+	merge.init_(av, ac -1);
+	merge.mergeSort_();
+	std::cout << std::is_sorted(merge.holder_.begin(), merge.holder_.end())  << std::endl;
 	return (0);
 }
