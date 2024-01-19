@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:14:08 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/05 14:58:20 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:36:08 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <map> // Include the necessary header file to be able to use map functions
 # include <sstream>// Include the necessary header file to be able to use stringstream functions
 # include <algorithm>
+# include <chrono>
+# include <ctime>
 
 class BitcoinExchange
 {

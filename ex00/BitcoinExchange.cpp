@@ -6,11 +6,26 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:13:58 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/05 17:45:52 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:48:33 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+
+// ========================================================================
+
+void printCurrentDateTime() {
+    // Get current time as time_t
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+    // Convert to tm struct
+    std::tm* timeInfo = std::localtime(&currentTime);
+
+    // Print date and time
+    std::cout << "Year: " << 1900 + timeInfo->tm_year << "\n"
+              << "Month: " << 1 + timeInfo->tm_mon << "\n"
+              << "Day: " << timeInfo->tm_mday << "\n";
+}
 
 // ========================================================================
 
@@ -56,12 +71,12 @@ int BitcoinExchange::check(char **av)
     std::ifstream file(av[1]); // Open the file for reading
     if (!file)                 // Check if the file is open
     {
-        std::cout << "Error: could not open file" << std::endl;
+        std::cout << "Error: could not open file1" << std::endl;
         return (1);
     }
     if (!std::getline(file, holder))
     {
-        std::cout << "Error: could not read file" << std::endl;
+        std::cout << "Error: could not read file2" << std::endl;
         return (1);
     }
     if (holder.compare("date | value") != 0)
@@ -120,6 +135,12 @@ int BitcoinExchange::checkDate(std::string date)
     std::stringstream ss(date);
     std::string buffer;
 
+     // Get current time as time_t
+    std::time_t currentTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+    // Convert to tm struct
+    std::tm* timeInfo = std::localtime(&currentTime);
+    
     hyphen = 0;
     for (int i = 0; date[i]; i++)
     {
@@ -135,7 +156,7 @@ int BitcoinExchange::checkDate(std::string date)
     hyphen = 0;
     std::getline(ss, buffer, '-');
     year = std::strtod(buffer.c_str(), NULL); // convert string to double
-    if (year < 2009 || year > 2024)
+    if (year < 2009 || year > 1900 + timeInfo->tm_year)
     {
         std::cerr << "Error: invalid date2" << std::endl;
         return (1);
@@ -172,6 +193,11 @@ int BitcoinExchange::checkDate(std::string date)
     if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
     {
         std::cerr << "Error: invalid date8" << std::endl;
+        return (1);
+    }
+    if (year == 1900 + timeInfo->tm_year && (month >  1 + timeInfo->tm_mon || day > timeInfo->tm_mday))
+    {
+        std::cerr << "Error: invalid date9" << std::endl;
         return (1);
     }
     return (0);

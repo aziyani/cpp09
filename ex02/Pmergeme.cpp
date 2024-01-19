@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:13:30 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/17 17:37:39 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:09:06 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,21 @@ Pmergeme::Pmergeme(){
 	elementsize_ = 1;
 }
 
+// ===========================================================================
+
+void	Pmergeme::puts() const
+{
+	vector::const_iterator it = holder.begin();
+	while ( it != holder.end())
+	{
+		std::cout << *it << " ";
+		it++;
+	}
+	std::cout << std::endl;
+}
+
+// ===========================================================================
+
 void Pmergeme::init(char **input, int size)
 {
 	// store the numbers from the input to the holder vector 
@@ -29,6 +44,7 @@ void Pmergeme::init(char **input, int size)
 			holder.push_back(std::strtod(token.c_str(), NULL));
 		}
 	}
+	numberOfelements = holder.size();
 }
 
 // ===========================================================================
@@ -258,7 +274,7 @@ void Pmergeme::init_(char **input, int size)
 
 // ===========================================================================
 
-listOflists Pmergeme::make_array_of_vectors_()
+listOflists Pmergeme::make_list_of_lists_()
 {
 	// create a vector of vectors from holder each vector holding elementsize number of elements
 	listOflists arr;
@@ -297,7 +313,7 @@ void Pmergeme::sort_pairs_(listOflists& arr){
 
 // ===========================================================================
 
-void Pmergeme::copy_arr_to_holder_(listOflists arr){ 
+void Pmergeme::copy_list_to_holder_(listOflists arr){ 
 	// copyy arr to holder vector
 	holder_.clear();
 	listOflists::iterator it = arr.begin();
@@ -402,8 +418,7 @@ void Pmergeme::insert_pendchain_()
 		while (true)
 		{
 			pos = std::lower_bound(mainchain_.begin(), start->second, start->first, compare_); // we should not pass the end of the mainchain_ we should pass the pendchain_.second?
-
-			ins = mainchain_.insert(pos, start->first);
+			mainchain_.insert(pos, start->first);
 			tmp = start;
 			--tmp;
 			
@@ -423,14 +438,14 @@ void Pmergeme::insert_pendchain_()
 
 // ===========================================================================
 
-void Pmergeme::insert_vector_()
+void Pmergeme::insert_list_()
 {
 	listOflists arr;
 
-	arr = make_array_of_vectors_();
+	arr = make_list_of_lists_();
 	create_mainchain_penchain_(arr);
 	insert_pendchain_();
-	copy_arr_to_holder_(mainchain_);
+	copy_list_to_holder_(mainchain_);
 }
 // ===========================================================================
 
@@ -438,14 +453,14 @@ void Pmergeme::mergeSort_()
 {
 	listOflists arr;
 	
-	arr = make_array_of_vectors_();
+	arr = make_list_of_lists_();
 	// std::cout << "elementsize_ : " << elementsize_ << std::endl;
 	// std::cout << "mergeSort arr.size : " << arr.size() << " arr.back().size : " << arr.back().size() << std::endl;
 	bool	shouldDoInsertion = (arr.size() > 3) || ( arr.size() == 3 && arr.back().size() == elementsize_);
 	// std::cout << shouldDoInsertion << std::endl;
 	
 	sort_pairs_(arr);
-	copy_arr_to_holder_(arr);
+	copy_list_to_holder_(arr);
 	// arr.size() > 3 && arr.back().size() == elementsize_
 	if (more_than_one_pair_(arr))
 	{
@@ -454,5 +469,5 @@ void Pmergeme::mergeSort_()
 		elementsize_ /= 2;
 	}
 	if (shouldDoInsertion)
-		insert_vector_();
+		insert_list_();
 }

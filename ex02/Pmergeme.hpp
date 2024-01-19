@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:18:51 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/16 22:55:27 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:08:34 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Pmergeme																// |
 {																			// |
 	public:																	// |
 		Pmergeme();        													// |
+		void			puts() const;										// |
 		void			init(char **input, int size);						// |
 		void			mergeSort();										// |
 		void			copy_arr_to_holder(vectorOfvectors arr);			// |
@@ -49,23 +50,23 @@ class Pmergeme																// |
 // ---------------------------LIST------------------------------------------// |
 		void			init_(char **input, int size);						// |
 		void			mergeSort_();										// |
-		void			copy_arr_to_holder_(listOflists arr);				// |
+		void			copy_list_to_holder_(listOflists arr);				// |
 		bool			more_than_one_pair_(listOflists arr);				// |
-		listOflists	make_array_of_vectors_();								// |
-		void			insert_vector_();									// |
+		listOflists		make_list_of_lists_();								// |
+		void			insert_list_();										// |
 		void			sort_pairs_(listOflists &);							// |
 		void 			insert_pendchain_();								// |
 		void 			create_mainchain_penchain_(listOflists arr);		// |
-		void			update_(listOflists::iterator ins);					// |
-		vector			holder;												// |
-		list		holder_;												// |
+		size_t			numberOfelements;												// |
 // ---------------------------VECTOR----------------------------------------// |
 	private:																// |
+		vector			holder;												// |
 		size_t			elementsize;										// |
 		vector			rest;												// |
 		vectorOfvectors	mainchain;											// |
 		pend			pendchain;											// |
 // ---------------------------LIST------------------------------------------// |
+		list		holder_;												// |
 		size_t		elementsize_;											// |
 		list		rest_;													// |
 		listOflists	mainchain_;												// |

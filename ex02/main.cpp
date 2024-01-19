@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:50:31 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/17 17:35:57 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 12:19:40 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 //     }
 //     std::cout << '\n';
 // }
+
+// Time to process a range of 5 elements with std::[..] : 0.00031 us
+
 int main(int ac, char **av)
 {
 	Pmergeme merge;
@@ -28,11 +31,23 @@ int main(int ac, char **av)
 		return (1);
 	}
 	merge.init(av, ac -1);
+	std::cout << "Before: ";
+	merge.puts();
+	unsigned long start = std::clock();
 	merge.mergeSort();
-	std::cout << std::is_sorted(merge.holder.begin(), merge.holder.end())  << std::endl;
+	unsigned long end = std::clock();
+	std::cout << "After: ";
+	merge.puts();
+	std::cout << "Time to process a range of " << merge.numberOfelements << " elements with std::vector : " \
+		<< (end - start) / (double)(CLOCKS_PER_SEC / 1000000) << " us" << std::endl;
+	// std::cout << std::is_sorted(merge.holder.begin(), merge.holder.end())  << std::endl;
 
 	merge.init_(av, ac -1);
+	start = std::clock();
 	merge.mergeSort_();
-	std::cout << std::is_sorted(merge.holder_.begin(), merge.holder_.end())  << std::endl;
+	end = std::clock();
+	std::cout << "Time to process a range of " << merge.numberOfelements << " elements with std::list : " \
+		<< (end - start) / (double)(CLOCKS_PER_SEC / 1000000) << " us" << std::endl;
+	// std::cout << std::is_sorted(merge.holder_.begin(), merge.holder_.end())  << std::endl;
 	return (0);
 }
