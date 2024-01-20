@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:13:30 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/19 12:09:06 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/20 13:10:50 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 // ===========================================================================
 
-Pmergeme::Pmergeme(){
+Pmergeme::Pmergeme()
+{
 	elementsize = 1; // element size of vector
 	elementsize_ = 1;
 }
@@ -32,16 +33,33 @@ void	Pmergeme::puts() const
 	std::cout << std::endl;
 }
 
+
+// ===========================================================================
+
+int isDigit(std::string str)
+{
+	for (size_t i = 0; i < str.length(); ++i)
+	{
+		if (!isdigit(str[i]))
+			return (0);
+	}
+	return (1);
+}
+
 // ===========================================================================
 
 void Pmergeme::init(char **input, int size)
 {
 	// store the numbers from the input to the holder vector 
-	std::string token;
+	int token;
 	for (int i = 1; i <= size; ++i){
 		std::stringstream ss(input[i]);
-		while (ss >> token){
-			holder.push_back(std::strtod(token.c_str(), NULL));
+		if (ss >> token && isDigit(input[i]))
+			holder.push_back(token);
+		else
+		{
+			std::cout << "Error: Invalid input" << std::endl;
+			exit(1);
 		}
 	}
 	numberOfelements = holder.size();
@@ -71,7 +89,8 @@ vectorOfvectors Pmergeme::make_array_of_vectors()
 
 // ===========================================================================
 
-void Pmergeme::sort_pairs(vectorOfvectors& arr){ 
+void Pmergeme::sort_pairs(vectorOfvectors& arr)
+{ 
 	// compare the last element of the first vector with the last element of the second vector if the first vector is bigger than the second vector swap them.
 	vector first, scnd;
 	size_t i = 0;
@@ -89,7 +108,8 @@ void Pmergeme::sort_pairs(vectorOfvectors& arr){
 
 // ===========================================================================
 
-void Pmergeme::copy_arr_to_holder(vectorOfvectors arr){ 
+void Pmergeme::copy_arr_to_holder(vectorOfvectors arr)
+{ 
 	// copyy arr to holder vector
 	holder.clear();
 	size_t i = 0;
@@ -107,7 +127,8 @@ void Pmergeme::copy_arr_to_holder(vectorOfvectors arr){
 
 // ===========================================================================
 
-bool Pmergeme::more_than_one_pair(vectorOfvectors arr){ // pair = two vectors
+bool Pmergeme::more_than_one_pair(vectorOfvectors arr)
+{
 	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize number of elements
 	size_t i = 0;
 	size_t count = 0;
@@ -124,20 +145,8 @@ bool Pmergeme::more_than_one_pair(vectorOfvectors arr){ // pair = two vectors
 
 // ===========================================================================
 
-void printVectorOfVectors(const std::vector<std::vector<int> >& vec) {
-	std::cout << "start vecofvec\n";
-	for (std::vector<std::vector<int> >::const_iterator it = vec.begin(); it != vec.end(); ++it) {
-		std::cout << "[ ";
-		for (std::vector<int>::const_iterator innerIt = it->begin(); innerIt != it->end(); ++innerIt) {
-			std::cout << *innerIt << " ";
-		}
-		std::cout << " ]\n";
-	}
-	std::cout << "\n\nend vecofvec\n";
-}
-// ===========================================================================
-
-void Pmergeme::create_mainchain_penchain(vectorOfvectors arr){
+void Pmergeme::create_mainchain_penchain(vectorOfvectors arr)
+{
 	std::pair<vector, vectorOfvectors::iterator> pair;
 
 	if (arr.back().size() != elementsize)
@@ -169,7 +178,8 @@ void Pmergeme::create_mainchain_penchain(vectorOfvectors arr){
 
 // ===========================================================================
 
-void     Pmergeme::update(vectorOfvectors::iterator ins){
+void     Pmergeme::update(vectorOfvectors::iterator ins)
+{
 	pend::iterator it;
 
 	it = pendchain.begin();
@@ -183,7 +193,8 @@ void     Pmergeme::update(vectorOfvectors::iterator ins){
 
 // ===========================================================================
 
-bool compare(vector first, vector second){ 
+bool compare(vector first, vector second)
+{
 	return (first.back() < second.back());
 }
 // ===========================================================================
@@ -211,7 +222,7 @@ void Pmergeme::insert_pendchain()
 			start--;
 		while (true)
 		{
-			pos = std::lower_bound(mainchain.begin(), start->second, start->first, compare); // we should not pass the end of the mainchain we should pass the pendchain.second?
+			pos = std::lower_bound(mainchain.begin(), start->second, start->first, compare); // (costum comparition) we should not pass the end of the mainchain we should pass the pendchain.second?
 			ins = mainchain.insert(pos, start->first);
 			update(ins);
 			pendchain.erase(start);
@@ -246,8 +257,9 @@ void Pmergeme::mergeSort()
 {
 	vectorOfvectors arr;
 
+	if (holder.size() == 1)
+		return ;
 	arr = make_array_of_vectors();
-	// printVectorOfVectors(arr);
 	sort_pairs(arr);
 	copy_arr_to_holder(arr);
 	if (more_than_one_pair(arr))
@@ -260,14 +272,31 @@ void Pmergeme::mergeSort()
 
 // ==================================================================================================================================================================================================
 
+int isDigit_(std::string str)
+{
+	for (size_t i = 0; i < str.length(); ++i)
+	{
+		if (!isdigit(str[i]))
+			return (0);
+	}
+	return (1);
+}
+
+// ===========================================================================
+
 void Pmergeme::init_(char **input, int size)
 {
 	// store the numbers from the input to the holder vector 
-	std::string token;
-	for (int i = 1; i <= size; ++i){
+	int token;
+	for (int i = 1; i <= size; ++i)
+	{
 		std::stringstream ss(input[i]);
-		while (ss >> token){
-			holder_.push_back(std::strtod(token.c_str(), NULL));
+		if (ss >> token && isDigit_(input[i]))
+			holder_.push_back(token);
+		else
+		{
+			std::cout << "Error: Invalid input" << std::endl;
+			exit(1);
 		}
 	}
 }
@@ -294,7 +323,8 @@ listOflists Pmergeme::make_list_of_lists_()
 
 // ===========================================================================
 
-void Pmergeme::sort_pairs_(listOflists& arr){ 
+void Pmergeme::sort_pairs_(listOflists& arr)
+{ 
 	// compare the last element of the first vector with the last element of the second vector if the first vector is bigger than the second vector swap them.
 	listOflists::iterator it = arr.begin();
 	while (it != arr.end()) // && std::distance(it, arr.end()) > 1
@@ -313,7 +343,8 @@ void Pmergeme::sort_pairs_(listOflists& arr){
 
 // ===========================================================================
 
-void Pmergeme::copy_list_to_holder_(listOflists arr){ 
+void Pmergeme::copy_list_to_holder_(listOflists arr)
+{ 
 	// copyy arr to holder vector
 	holder_.clear();
 	listOflists::iterator it = arr.begin();
@@ -332,7 +363,8 @@ void Pmergeme::copy_list_to_holder_(listOflists arr){
 
 // ===========================================================================
 
-bool Pmergeme::more_than_one_pair_(listOflists arr){ // pair = two vectors
+bool Pmergeme::more_than_one_pair_(listOflists arr)
+{
 	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize_ number of elements
 	listOflists::iterator it = arr.begin();
 	size_t count = 0;
@@ -354,7 +386,8 @@ bool Pmergeme::more_than_one_pair_(listOflists arr){ // pair = two vectors
 
 // ===========================================================================
 
-void Pmergeme::create_mainchain_penchain_(listOflists arr){
+void Pmergeme::create_mainchain_penchain_(listOflists arr)
+{
 	std::pair<list, listOflists::iterator> pair;
 
 	if (arr.back().size() != elementsize_)
@@ -388,7 +421,8 @@ void Pmergeme::create_mainchain_penchain_(listOflists arr){
 
 // ===========================================================================
 
-bool compare_(list first, list second){ 
+bool compare_(list first, list second)
+{ 
 	return (first.back() < second.back());
 }
 // ===========================================================================
@@ -453,15 +487,13 @@ void Pmergeme::mergeSort_()
 {
 	listOflists arr;
 	
+	if (holder_.size() == 1)
+		return ;
 	arr = make_list_of_lists_();
-	// std::cout << "elementsize_ : " << elementsize_ << std::endl;
-	// std::cout << "mergeSort arr.size : " << arr.size() << " arr.back().size : " << arr.back().size() << std::endl;
 	bool	shouldDoInsertion = (arr.size() > 3) || ( arr.size() == 3 && arr.back().size() == elementsize_);
-	// std::cout << shouldDoInsertion << std::endl;
 	
 	sort_pairs_(arr);
 	copy_list_to_holder_(arr);
-	// arr.size() > 3 && arr.back().size() == elementsize_
 	if (more_than_one_pair_(arr))
 	{
 		elementsize_ *= 2;
@@ -471,3 +503,5 @@ void Pmergeme::mergeSort_()
 	if (shouldDoInsertion)
 		insert_list_();
 }
+
+// ===========================================================================

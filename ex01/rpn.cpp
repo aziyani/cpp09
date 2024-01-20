@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:23:10 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/19 13:22:52 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/19 17:19:01 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int rpn::evaluated(const std::string& expression)
 		else
 		{
 			if (stack.size() < 2)
-				return 1;
+				return -1;
 
 			int first = stack.top(); stack.pop();
 			int second = stack.top(); stack.pop();
@@ -58,9 +58,6 @@ int rpn::evaluated(const std::string& expression)
 		}
 	}
 	if (stack.size() != 1)
-	{
-		std::cerr << "Error: Invalid stack size" << std::endl;
 		return (-1);
-	}
 	return (stack.top());
 }

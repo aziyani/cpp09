@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:18:51 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/19 12:08:34 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/20 13:11:42 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <algorithm> // Include the necessary header file to be able to use algorithm functions
 # include <vector> // Include the necessary header file to be able to use vector
 # include <list> // Include the necessary header file to be able to use list functions
+
 
 // ---------------------------VECTOR-------------------------------------------
 typedef std::vector<int> vector;											// |
@@ -57,16 +58,16 @@ class Pmergeme																// |
 		void			sort_pairs_(listOflists &);							// |
 		void 			insert_pendchain_();								// |
 		void 			create_mainchain_penchain_(listOflists arr);		// |
-		size_t			numberOfelements;												// |
+		size_t			numberOfelements;									// |
 // ---------------------------VECTOR----------------------------------------// |
 	private:																// |
-		vector			holder;												// |
+		list		holder_;												// |
 		size_t			elementsize;										// |
 		vector			rest;												// |
 		vectorOfvectors	mainchain;											// |
 		pend			pendchain;											// |
 // ---------------------------LIST------------------------------------------// |
-		list		holder_;												// |
+		vector			holder;												// |
 		size_t		elementsize_;											// |
 		list		rest_;													// |
 		listOflists	mainchain_;												// |

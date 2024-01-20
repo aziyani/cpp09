@@ -6,20 +6,11 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:50:31 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/19 12:19:40 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/20 13:11:02 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Pmergeme.hpp"
-
-// void printVector(std::vector<int>& vec) {
-//     for (std::vector<int>::const_iterator it = vec.begin(); it != vec.end(); ++it) {
-//         std::cout << *it << ' ';
-//     }
-//     std::cout << '\n';
-// }
-
-// Time to process a range of 5 elements with std::[..] : 0.00031 us
 
 int main(int ac, char **av)
 {
