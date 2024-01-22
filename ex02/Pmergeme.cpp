@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:13:30 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/20 13:10:50 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/22 01:56:08 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,23 @@
 
 Pmergeme::Pmergeme()
 {
-	elementsize = 1; // element size of vector
+	elementsize = 1;
 	elementsize_ = 1;
+}
+
+Pmergeme::Pmergeme(const Pmergeme& obj)
+{
+	*this = obj;
+}
+
+Pmergeme& Pmergeme::operator=(const Pmergeme& obj)
+{
+	(void)obj;
+	return *this;
+}
+
+Pmergeme::~Pmergeme()
+{
 }
 
 // ===========================================================================
@@ -50,7 +65,6 @@ int isDigit(std::string str)
 
 void Pmergeme::init(char **input, int size)
 {
-	// store the numbers from the input to the holder vector 
 	int token;
 	for (int i = 1; i <= size; ++i){
 		std::stringstream ss(input[i]);
@@ -69,7 +83,6 @@ void Pmergeme::init(char **input, int size)
 
 vectorOfvectors Pmergeme::make_array_of_vectors()
 {
-	// create a vector of vectors from holder each vector holding elementsize number of elements
 	vectorOfvectors arr;
 	vector temp;
 	size_t i = 0;
@@ -91,7 +104,6 @@ vectorOfvectors Pmergeme::make_array_of_vectors()
 
 void Pmergeme::sort_pairs(vectorOfvectors& arr)
 { 
-	// compare the last element of the first vector with the last element of the second vector if the first vector is bigger than the second vector swap them.
 	vector first, scnd;
 	size_t i = 0;
 	while (i  < arr.size() - 1)
@@ -110,7 +122,6 @@ void Pmergeme::sort_pairs(vectorOfvectors& arr)
 
 void Pmergeme::copy_arr_to_holder(vectorOfvectors arr)
 { 
-	// copyy arr to holder vector
 	holder.clear();
 	size_t i = 0;
 	while (i < arr.size())
@@ -129,7 +140,6 @@ void Pmergeme::copy_arr_to_holder(vectorOfvectors arr)
 
 bool Pmergeme::more_than_one_pair(vectorOfvectors arr)
 {
-	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize number of elements
 	size_t i = 0;
 	size_t count = 0;
 	while (i < arr.size())
@@ -222,7 +232,7 @@ void Pmergeme::insert_pendchain()
 			start--;
 		while (true)
 		{
-			pos = std::lower_bound(mainchain.begin(), start->second, start->first, compare); // (costum comparition) we should not pass the end of the mainchain we should pass the pendchain.second?
+			pos = std::lower_bound(mainchain.begin(), start->second, start->first, compare); // (costum comparition)
 			ins = mainchain.insert(pos, start->first);
 			update(ins);
 			pendchain.erase(start);
@@ -286,7 +296,6 @@ int isDigit_(std::string str)
 
 void Pmergeme::init_(char **input, int size)
 {
-	// store the numbers from the input to the holder vector 
 	int token;
 	for (int i = 1; i <= size; ++i)
 	{
@@ -305,7 +314,6 @@ void Pmergeme::init_(char **input, int size)
 
 listOflists Pmergeme::make_list_of_lists_()
 {
-	// create a vector of vectors from holder each vector holding elementsize number of elements
 	listOflists arr;
 	list::iterator it = holder_.begin();
 	while (it != holder_.end())
@@ -325,13 +333,12 @@ listOflists Pmergeme::make_list_of_lists_()
 
 void Pmergeme::sort_pairs_(listOflists& arr)
 { 
-	// compare the last element of the first vector with the last element of the second vector if the first vector is bigger than the second vector swap them.
 	listOflists::iterator it = arr.begin();
-	while (it != arr.end()) // && std::distance(it, arr.end()) > 1
+	while (it != arr.end())
 	{
 		listOflists::iterator nextIterator = it;
 		++nextIterator;
-		if (nextIterator == arr.end())//////// this line is added only in list why? why we don't check it in the vector
+		if (nextIterator == arr.end())
             break;
 		if (nextIterator->size() != elementsize_)
 			break ;
@@ -345,7 +352,6 @@ void Pmergeme::sort_pairs_(listOflists& arr)
 
 void Pmergeme::copy_list_to_holder_(listOflists arr)
 { 
-	// copyy arr to holder vector
 	holder_.clear();
 	listOflists::iterator it = arr.begin();
 	while (it != arr.end())
@@ -365,14 +371,13 @@ void Pmergeme::copy_list_to_holder_(listOflists arr)
 
 bool Pmergeme::more_than_one_pair_(listOflists arr)
 {
-	// check if the array contains more than one 4 vectors and the 4 vectors size are equal elementsize_ number of elements
 	listOflists::iterator it = arr.begin();
 	size_t count = 0;
 	while (it != arr.end())
 	{
 		listOflists::iterator nextIterator = it;
 		++nextIterator;
-		if (it->size() == elementsize_ && (nextIterator != arr.end() && nextIterator->size() == elementsize_)) //
+		if (it->size() == elementsize_ && (nextIterator != arr.end() && nextIterator->size() == elementsize_))
 			count++;
 		if (nextIterator != arr.end())
             std::advance(it, 2);
@@ -411,7 +416,7 @@ void Pmergeme::create_mainchain_penchain_(listOflists arr)
         pair.second = mainchain_.end();
         ++it;
         if (it != arr.end()){
-            pair.second = mainchain_.insert(mainchain_.end(), *it); // we use insert here because it is return an iterator of the position of the inserted element
+            pair.second = mainchain_.insert(mainchain_.end(), *it);
         	++it;
 		}
 
@@ -451,7 +456,7 @@ void Pmergeme::insert_pendchain_()
 			start--;
 		while (true)
 		{
-			pos = std::lower_bound(mainchain_.begin(), start->second, start->first, compare_); // we should not pass the end of the mainchain_ we should pass the pendchain_.second?
+			pos = std::lower_bound(mainchain_.begin(), start->second, start->first, compare_);
 			mainchain_.insert(pos, start->first);
 			tmp = start;
 			--tmp;

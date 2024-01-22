@@ -1,4 +1,4 @@
-NAME =  rpn
+NAME =  RPN
 
 CC = C++
 
@@ -6,8 +6,8 @@ RM = rm -f
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = main.cpp rpn.cpp
-HFILE = rpn.hpp
+SRC = main.cpp RPN.cpp
+HFILE = RPN.hpp
 
 OBJ = $(SRC:%.cpp=%.o)
 

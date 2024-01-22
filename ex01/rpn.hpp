@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RPN.hpp                                            :+:      :+:    :+:   */
+/*   rpn.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:23:19 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/05 19:36:48 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/21 22:04:42 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ class rpn
 {
     public:
         rpn();
+        rpn(const rpn& obj);
+        rpn operator=(const rpn& obj);
+        ~rpn();
         int evaluated(const std::string& expression);
 };
 

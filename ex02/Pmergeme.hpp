@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:18:51 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/20 13:11:42 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/22 01:54:56 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
 
-# include <iostream> // Include the necessary header file to be able to use cout, cin, etc.
-# include <fstream> // Include the necessary header file to be able to use ifstream
-# include <string> // Include the necessary header file to be able to use string functions
-# include <map> // Include the necessary header file to be able to use map functions
-# include <sstream> // Include the necessary header file to be able to use stringstream functions
-# include <algorithm> // Include the necessary header file to be able to use algorithm functions
-# include <vector> // Include the necessary header file to be able to use vector
-# include <list> // Include the necessary header file to be able to use list functions
-
+# include <iostream>
+# include <fstream>
+# include <string>
+# include <map>
+# include <sstream>
+# include <algorithm>
+# include <vector>
+# include <list>
 
 // ---------------------------VECTOR-------------------------------------------
 typedef std::vector<int> vector;											// |
@@ -37,6 +36,9 @@ class Pmergeme																// |
 {																			// |
 	public:																	// |
 		Pmergeme();        													// |
+		Pmergeme(const Pmergeme& obj);										// |
+		Pmergeme& operator=(const Pmergeme&);								// |
+		~Pmergeme();														// |
 		void			puts() const;										// |
 		void			init(char **input, int size);						// |
 		void			mergeSort();										// |

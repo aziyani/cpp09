@@ -1,8 +1,8 @@
-NAME =  pmergeme
+NAME =  PmergeMe
 
 CC = C++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address -g
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
 RM = rm -rf
 

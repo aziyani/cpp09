@@ -1,63 +1,84 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rpn.cpp                                            :+:      :+:    :+:   */
+/*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:23:10 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/19 17:19:01 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/22 02:34:40 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "rpn.hpp"
+# include "RPN.hpp"
 
 rpn::rpn()
 {
 }
 
+rpn::rpn(const rpn& obj)
+{
+	*this = obj;
+}
+
+rpn rpn::operator=(const rpn& obj)
+{
+	(void)obj;
+	return (*this);
+}
+
+rpn::~rpn()
+{
+}
+
 int rpn::evaluated(const std::string& expression)
 {
-	std::stringstream ss(expression);
-	std::stack<int> stack;
-	std::string token;
+    std::stack<int> stack;
+    std::string number;
 
-	while (ss >> token) // The while loop is used here to iterate over each token in the string stream ss.
-	{
-		if(token.empty())
-			break;
-		if (isdigit(token[0]))
-		{
-			stack.push(std::atoi(token.c_str()));
-		}
-		else
-		{
-			if (stack.size() < 2)
-				return -1;
+    for (std::string::const_iterator it = expression.begin(); it != expression.end(); ++it)
+    {
+        char c = *it;
+        if (isdigit(c))
+        {
+            number += c;
+        }
+        else
+        {
+            if (!number.empty())
+            {
+                stack.push(std::atoi(number.c_str()));
+                number.clear();
+            }
 
-			int first = stack.top(); stack.pop();
-			int second = stack.top(); stack.pop();
+            if (c == '+' || c == '-' || c == '*' || c == '/')
+            {
+                if (stack.size() < 2)
+                    return -1;
 
-			if (token == "+")
-				stack.push(first + second);
-			else if (token == "-")
-				stack.push(second - first);
-			else if (token == "*")
-				stack.push(first * second);
-			else if (token == "/")
-			{
-				if (second == 0)
-				{
-					std::cerr << "Error: division by zero" << std::endl;
-					return (1);
-				}
-				stack.push(second / first);
-			}
-			else
-				return (1);
-		}
-	}
-	if (stack.size() != 1)
-		return (-1);
-	return (stack.top());
+                int first = stack.top(); stack.pop();
+                int second = stack.top(); stack.pop();
+
+                if (c == '+')
+                    stack.push(first + second);
+                else if (c == '-')
+                    stack.push(second - first);
+                else if (c == '*')
+                    stack.push(first * second);
+                else if (c == '/')
+                {
+                    if (second == 0)
+                        return (-1);
+                    stack.push(second / first);
+                }
+            }
+			else if (!isspace(c))
+				return (-1);
+        }
+    }
+	if (!number.empty())
+		stack.push(std::atoi(number.c_str()));
+    if (stack.size() != 1)
+        return (-1);
+    return (stack.top());
 }
