@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 15:13:58 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/22 02:43:29 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/23 22:54:39 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ int BitcoinExchange::check(char **av)
 	{
 		std::string date;
 		int i = 0;
+
+		if (holder.empty())
+			continue;
 		while (holder[i] != '|' && holder[i] != '\0')
 		{
 			date += holder[i];
@@ -120,6 +123,12 @@ void BitcoinExchange::print_equivalent(std::string date, float value)
 {
 	std::map<std::string, float>::iterator mapIterator;
 	mapIterator = database.lower_bound(date);
+	if (mapIterator == database.begin() && mapIterator->first != date)
+	{
+		std::cerr << "Error: date not found." << std::endl;
+		return;
+	}
+	else
 	if (mapIterator == database.end())
 		mapIterator--;
 	else if (mapIterator->first != date)
@@ -134,7 +143,7 @@ void BitcoinExchange::print_equivalent(std::string date, float value)
 
 bool BitcoinExchange::isLeapYear(int year)
 {
-    if (year % 4 != 0)
+    if (year % 4 != 0) // if not divisible by 4 then not a leap year
     {
         return false;
     }

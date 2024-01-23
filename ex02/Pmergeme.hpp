@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 22:18:51 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/22 01:54:56 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/23 20:30:16 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ class Pmergeme																// |
 		size_t			numberOfelements;									// |
 // ---------------------------VECTOR----------------------------------------// |
 	private:																// |
-		list		holder_;												// |
+		vector			holder;												// |
 		size_t			elementsize;										// |
 		vector			rest;												// |
 		vectorOfvectors	mainchain;											// |
 		pend			pendchain;											// |
 // ---------------------------LIST------------------------------------------// |
-		vector			holder;												// |
+		list		holder_;												// |
 		size_t		elementsize_;											// |
 		list		rest_;													// |
 		listOflists	mainchain_;												// |

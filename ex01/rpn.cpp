@@ -6,7 +6,7 @@
 /*   By: aziyani <aziyani@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 15:23:10 by aziyani           #+#    #+#             */
-/*   Updated: 2024/01/22 02:34:40 by aziyani          ###   ########.fr       */
+/*   Updated: 2024/01/23 22:34:48 by aziyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int rpn::evaluated(const std::string& expression)
     for (std::string::const_iterator it = expression.begin(); it != expression.end(); ++it)
     {
         char c = *it;
-        if (isdigit(c))
+        if (isdigit(c) && (it + 1 == expression.end() || !isdigit(*(it + 1))))
         {
             number += c;
         }
